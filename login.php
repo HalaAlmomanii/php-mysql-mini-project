@@ -1,12 +1,22 @@
 <?php
+include ('db.php');
+session_start();
 if(isset($_POST['login'])){
    $username=$_POST['username'] ;
     $password=$_POST['password'] ;
 
 
-    $sql= "SELECT * from coffetabel WHERE username='$username' && password= '$password'";
+    $sql= "SELECT * from coffetabel WHERE username=:username && password=:password";
 
-    include ('db.php');
+    $stmt=$conn->prepare($sql);
+    $stmt->execute(['username'=>$username,'password'=>$password]);
+    $result=$stmt->fetch();
+    if($result->username===$username &&$result->password===$password){
+      header('Location:dashbord.php');
+    }
+    else {
+        echo " you are not validation ";
+    }
 
 
 }

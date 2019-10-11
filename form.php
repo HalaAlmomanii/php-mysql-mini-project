@@ -1,5 +1,5 @@
 <?php
-
+ include ('db.php');
 session_start();
 if (isset($_POST["submit"])) {
     $fname=  $_POST["fname"];
@@ -9,9 +9,15 @@ if (isset($_POST["submit"])) {
       $email=$_POST["email"];
 
 $_SESSION["name"] = $fname;
-echo $_SESSION["name"];
-   $sql= "INSERT INTO coffetabel (fname,lname , password, username, email) VALUES ('$fname','$lname','$password','$username','$email')";
- include ('db.php');
+
+   $sql= "INSERT INTO coffetabel (fname,lname , password, username, email) VALUES (:fname,:lname,:password,:username,:email)";
+
+    $stmt=$conn->prepare($sql);
+    $stmt->execute(['fname'=>$fname,'lname'=>$lname , 'password'=>$password, 'username'=>$username, 'email'=>$email]);
+  header('Location:dashbord.php');
+
+
+
 
 } 
 ?>
